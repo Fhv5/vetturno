@@ -1,0 +1,55 @@
+name: vetturno
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: vetturno
+      MYSQL_USER: vetturno
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Ejecuta primero scripts/configure.ps1}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Ejecuta primero scripts/configure.ps1}
+      TZ: America/Santiago
+    ports:
+      - "127.0.0.1:${MYSQL_PORT:-13306}:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/01-test.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    restart: unless-stopped
+  api:
+    build: .
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/vetturno?connectionTimeZone=LOCAL
+      DB_USER: vetturno
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:?Ejecuta primero scripts/configure.ps1}
+      APP_TIME_ZONE: America/Santiago
+      JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=70
+    ports:
+      - "127.0.0.1:${APP_PORT:-8088}:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: unless-stopped
+  test:
+    image: maven:3.9.9-eclipse-temurin-17
+    profiles: [test]
+    working_dir: /app
+    volumes:
+      - .:/app
+      - maven-cache:/root/.m2
+    environment:
+      TEST_DB_URL: jdbc:mysql://mysql:3306/vetturno_test
+      DB_USER: vetturno
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    command: mvn -B -ntp verify
+    depends_on:
+      mysql:
+        condition: service_healthy
+volumes:
+  mysql-data:
+  maven-cache:

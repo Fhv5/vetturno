@@ -1,0 +1,105 @@
+{
+  "java": "17",
+  "mysql": "8.4",
+  "integration_tests": {
+    "run": 24,
+    "failures": 0
+  },
+  "http_and_restart_checks": [
+    {
+      "scenario": "OpenAPI público por HTTP",
+      "result": "passed",
+      "actual": 200
+    },
+    {
+      "scenario": "Identidad de la API",
+      "result": "passed",
+      "actual": "VetTurno"
+    },
+    {
+      "scenario": "Once operaciones obligatorias",
+      "result": "passed",
+      "actual": 11
+    },
+    {
+      "scenario": "Acceso sin token rechazado",
+      "result": "passed",
+      "actual": 401
+    },
+    {
+      "scenario": "Registro por HTTP",
+      "result": "passed",
+      "actual": 200
+    },
+    {
+      "scenario": "USER no crea veterinarios",
+      "result": "passed",
+      "actual": 403
+    },
+    {
+      "scenario": "Registro siempre USER",
+      "result": "passed",
+      "actual": "USER"
+    },
+    {
+      "scenario": "BCrypt persistido",
+      "result": "passed",
+      "actual": true
+    },
+    {
+      "scenario": "Login por HTTP",
+      "result": "passed",
+      "actual": 200
+    },
+    {
+      "scenario": "ADMIN crea veterinario",
+      "result": "passed",
+      "actual": 201
+    },
+    {
+      "scenario": "Crear propietario",
+      "result": "passed",
+      "actual": 201
+    },
+    {
+      "scenario": "Crear mascota relacionada",
+      "result": "passed",
+      "actual": 201
+    },
+    {
+      "scenario": "Relación con propietario",
+      "result": "passed",
+      "actual": 21
+    },
+    {
+      "scenario": "Crear cita futura",
+      "result": "passed",
+      "actual": 201
+    },
+    {
+      "scenario": "Rechazar cita duplicada",
+      "result": "passed",
+      "actual": 400
+    },
+    {
+      "scenario": "Filtrar por veterinario",
+      "result": "passed",
+      "actual": 21
+    },
+    {
+      "scenario": "JWT válido después de reinicio",
+      "result": "passed",
+      "actual": 200
+    },
+    {
+      "scenario": "Cita persistente después de reinicio de proceso",
+      "result": "passed",
+      "actual": 21
+    },
+    {
+      "scenario": "Propietario persistente",
+      "result": "passed",
+      "actual": "Elena"
+    }
+  ]
+}
