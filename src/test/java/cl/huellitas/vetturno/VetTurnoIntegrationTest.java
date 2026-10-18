@@ -332,6 +332,9 @@ class VetTurnoIntegrationTest {
         assertThat(spec.at("/components/securitySchemes/bearerAuth/scheme").asText()).isEqualTo("bearer");
         assertThat(spec.get("paths").size()).isEqualTo(7);
         assertThat(spec.at("/paths/~1api~1citas~1veterinario~1{id}/get").isMissingNode()).isFalse();
+        assertThat(spec.at("/paths/~1api~1auth~1login/post/security").isArray()).isTrue();
+        assertThat(spec.at("/paths/~1api~1auth~1login/post/security").size()).isZero();
+        assertThat(spec.at("/paths/~1api~1auth~1register/post/security").isArray()).isTrue();
     }
 
     private MvcResult postJson(String route, String token, Object data) throws Exception {
